@@ -310,6 +310,8 @@ namespace Renomear
             return retorno;
         }
 
+
+    
         public static string RemoverCaracteresEspeciais(string valor)
         {
             string retorno = valor;
@@ -365,22 +367,25 @@ namespace Renomear
             de_para.Add(new List<string> { "@", "_" });
 
 
-            de_para.Add(new List<string> { " ", "_" });
+            de_para.Add(new List<string> { "_", " " });
+            de_para.Add(new List<string> { ".", " " });
             de_para.Add(new List<string> { "!", "" });
-            de_para.Add(new List<string> { "#", "_" });
-            de_para.Add(new List<string> { "(", "_" });
-            de_para.Add(new List<string> { ")", "_" });
-            de_para.Add(new List<string> { "#", "_" });
+            de_para.Add(new List<string> { "#", "" });
+            de_para.Add(new List<string> { "(", " " });
+            de_para.Add(new List<string> { ")", " " });
+            de_para.Add(new List<string> { "#", " " });
             de_para.Add(new List<string> { "º", "" });
             de_para.Add(new List<string> { "°", "" });
-            de_para.Add(new List<string> { "=", "_" });
-            de_para.Add(new List<string> { "~", "_" });
-            de_para.Add(new List<string> { "+", "_" });
-            de_para.Add(new List<string> { "*", "_" });
-            de_para.Add(new List<string> { "_-_", "_" });
-            de_para.Add(new List<string> { "__", "_" });
-            de_para.Add(new List<string> { "__", "_" });
-            de_para.Add(new List<string> { "__", "_" });
+            de_para.Add(new List<string> { "=", " " });
+            de_para.Add(new List<string> { "~", " " });
+            de_para.Add(new List<string> { "+", " " });
+            de_para.Add(new List<string> { "*", " " });
+            de_para.Add(new List<string> { "_-_", " - " });
+            de_para.Add(new List<string> { "  ", " " });
+            de_para.Add(new List<string> { "  ", " " });
+            de_para.Add(new List<string> { "  ", " " });
+            de_para.Add(new List<string> { "  ", " " });
+            de_para.Add(new List<string> { "  ", " " });
 
 
 
@@ -390,6 +395,8 @@ namespace Renomear
                 retorno = retorno.Replace(d[0], d[1]);
             }
 
+            retorno = retorno.TrimStart();
+            retorno = retorno.TrimEnd();
             retorno = retorno.TrimStart('_');
             retorno = retorno.TrimEnd('_');
             retorno = retorno.TrimStart('-');

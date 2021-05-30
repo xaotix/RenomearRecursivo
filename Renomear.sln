@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Renomear", "Renomear\Renomear.csproj", "{BC544CC8-7B11-4A07-A603-4D270C959C04}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenomeiaWPF", "RenomeiaWPF\RenomeiaWPF.csproj", "{B9A211C9-DC1C-457F-8A4F-0FE1B94DA5D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{BC544CC8-7B11-4A07-A603-4D270C959C04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC544CC8-7B11-4A07-A603-4D270C959C04}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC544CC8-7B11-4A07-A603-4D270C959C04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9A211C9-DC1C-457F-8A4F-0FE1B94DA5D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9A211C9-DC1C-457F-8A4F-0FE1B94DA5D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9A211C9-DC1C-457F-8A4F-0FE1B94DA5D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9A211C9-DC1C-457F-8A4F-0FE1B94DA5D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
