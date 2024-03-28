@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Conexoes">
-      <HintPath>..\..\DLLS\Conexoes.dll</HintPath>
+      <HintPath>..\Conexoes.dll</HintPath>
     </Reference>
     <Reference Include="mysql.data">
       <HintPath>..\..\DLLS\mysql.data.dll</HintPath>

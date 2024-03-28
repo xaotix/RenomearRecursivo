@@ -26,13 +26,20 @@ namespace Renomear
 
         static void Main(string[] args)
         {
-            inicio:
+        inicio:
+            Console.Clear();
+            Console.WriteLine("==============================");
+            Console.WriteLine("Renomeia Recursivo v1.0");
+            Console.WriteLine("Copie os arquivos para uma outra pasta.");
+            Console.WriteLine("O Programa substitui os arquivos.");
+
+            Console.WriteLine("===================================!");
             Raiz = Perguntar("Defina o Diretório Raiz:");
 
             if (Directory.Exists(Raiz))
             {
 
-                if(Raiz.Contains(@"\") && !Raiz.EndsWith(@"\"))
+                if (Raiz.Contains(@"\") && !Raiz.EndsWith(@"\"))
                 {
                     Raiz = Raiz + @"\";
                 }
@@ -46,11 +53,13 @@ namespace Renomear
                 Pastas_Renomear = Perguntar("Restringir comprimento do nome das Pastas? (S ou N)");
                 Arquivos_Renomear = Perguntar("Restringir comprimento do nome dos Arquivos? (S ou N)");
                 Apagar_Pastas_Vazias = Perguntar("Apagar pastas vazias? (S ou N)");
-              
 
-                if(Remover_Caracteres_Especiais.StartsWith("S"))
+
+                TudoMaiusculo = "S";
+                SubstituirChar = Perguntar("Digite os caracteres que deseja substituir. (ENTER) para nenhum").ToUpper();
+                if (SubstituirChar.Length>0)
                 {
-                    TudoMaiusculo = Perguntar("Tudo maiúsculo? (S ou N)");
+                    SubstituirCharPor = Perguntar($"Digite os caracteres que deseja colocar no lugar de [{SubstituirChar}]").ToUpper();
                 }
 
                 Excluir_Arquivos_Temporarios = Perguntar("Excluir arquivos temporarios? (S ou N)");
@@ -59,7 +68,7 @@ namespace Renomear
                 {
                     max_arq = GetInt(Perguntar("Digite o comprimento máximo de caracteres para os arquivos:"));
 
-                    if(max_arq<3)
+                    if (max_arq < 3)
                     {
                         Console.WriteLine("Valor inválido.");
                         Arquivos_Renomear = "N";
@@ -84,6 +93,7 @@ namespace Renomear
 
                 VamoTrabaia().Wait();
                 Console.Read();
+                goto inicio;
             }
             else
             {
@@ -165,6 +175,8 @@ namespace Renomear
         public static string Remover_Caracteres_Especiais_Pasta { get; set; } = "N";
         public static string Excluir_Arquivos_Temporarios { get; set; } = "N";
         public static string TudoMaiusculo { get; set; } = "N";
+        public static string SubstituirChar { get; set; } = "";
+        public static string SubstituirCharPor { get; set; } = "";
 
 
         public static bool Pergunta(string Pergunta, string Titulo = "Confirme")
@@ -194,17 +206,17 @@ namespace Renomear
         }
         public static async Task VamoTrabaia()
         {
-           
+
             await Task.Run(() =>
             {
-            if (Directory.Exists(Raiz))
+                if (Directory.Exists(Raiz))
                 {
                     AjustarPasta(Raiz);
                     Console.WriteLine("==============================");
                     Console.WriteLine("Finalizado!");
                     Console.WriteLine("===================================!");
                 }
-            else
+                else
                 {
                     Console.WriteLine($"PASTA INVÁLIDA ==> {Raiz} ");
                 }
@@ -231,7 +243,7 @@ namespace Renomear
                 }
             }
 
-            if (Remover_Caracteres_Especiais.StartsWith("S"))
+            if (Remover_Caracteres_Especiais.StartsWith("S") | (SubstituirChar.Length>0))
             {
                 arquivos = Directory.GetFiles(npasta, "*").ToList();
                 foreach (var arquivo in arquivos)
@@ -239,9 +251,18 @@ namespace Renomear
                     var extensao = getExtensao(arquivo);
                     var nome = getNome(arquivo);
                     int cont = 0;
-                    var novo_nome = npasta + RemoverCaracteresEspeciais(nome) + extensao;
+                    var novo_nome = arquivo;
+                    if (SubstituirChar.Length > 0)
+                    {
+                        novo_nome = novo_nome.Replace(SubstituirChar, SubstituirCharPor);
+                    }
+                    if (Remover_Caracteres_Especiais.StartsWith("S"))
+                    {
+                        novo_nome = npasta + RemoverCaracteresEspeciais(nome) + extensao;
+                    }
 
-                    if(novo_nome.ToUpper() != arquivo.ToUpper())
+
+                    if (novo_nome.ToUpper() != arquivo.ToUpper())
                     {
                         while (File.Exists(novo_nome))
                         {
@@ -253,10 +274,21 @@ namespace Renomear
                         {
                             novo_nome = novo_nome.ToUpper();
                         }
-                        Directory.Move(arquivo, novo_nome);
-                        Console.WriteLine($"RENOMEADO ==> {arquivo} renomeado para {novo_nome}");
+
+     
+                        try
+                        {
+                            Directory.Move(arquivo, novo_nome);
+                            Console.WriteLine($"RENOMEADO ==> {arquivo} renomeado para {novo_nome}");
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"ERRO ==> {arquivo} => {ex.Message}");
+
+                        }
+
                     }
-                    
+
                 }
             }
             List<string> sub_pastas = GetSubPastas(npasta);
@@ -292,10 +324,10 @@ namespace Renomear
         {
             var s = Directory.GetDirectories(npasta, "*").ToList();
             List<string> retorno = new List<string>();
-            foreach(var p in s)
+            foreach (var p in s)
             {
                 string pps = p;
-                if(pps.Contains(@"\") &&!pps.EndsWith(@"\"))
+                if (pps.Contains(@"\") && !pps.EndsWith(@"\"))
                 {
                     pps = pps + @"\";
                 }
@@ -311,7 +343,7 @@ namespace Renomear
         }
 
 
-    
+
         public static string RemoverCaracteresEspeciais(string valor)
         {
             string retorno = valor;
@@ -390,7 +422,7 @@ namespace Renomear
 
 
 
-            foreach(var d in de_para)
+            foreach (var d in de_para)
             {
                 retorno = retorno.Replace(d[0], d[1]);
             }
@@ -482,7 +514,7 @@ namespace Renomear
         {
             int max_arq = Program.max_arq;
 
-            if(ispasta)
+            if (ispasta)
             {
                 max_arq = Program.max_pasta;
             }
@@ -490,12 +522,12 @@ namespace Renomear
             string novo_nome = nome_arquivo_ou_pasta;
 
 
-            if (nome_arquivo_ou_pasta.ToUpper().Replace(@"\","").Replace(@"/","").EndsWith(".GRP"))
+            if (nome_arquivo_ou_pasta.ToUpper().Replace(@"\", "").Replace(@"/", "").EndsWith(".GRP"))
             {
                 return novo_nome;
             }
-                var nome = getNome(nome_arquivo_ou_pasta);
-            if(nome.Length>max_arq | nome_arquivo_ou_pasta.Length>200)
+            var nome = getNome(nome_arquivo_ou_pasta);
+            if (nome.Length > max_arq | nome_arquivo_ou_pasta.Length > 200)
             {
                 var nome_pai = getUpdir(nome_arquivo_ou_pasta);
 
@@ -532,7 +564,7 @@ namespace Renomear
                     {
                         return nome_arquivo_ou_pasta;
                     }
-                    if(Excluir_Arquivos_Temporarios.StartsWith("S"))
+                    if (Excluir_Arquivos_Temporarios.StartsWith("S"))
                     {
                         foreach (string e in excluir)
                         {
@@ -552,12 +584,12 @@ namespace Renomear
                             }
                         }
                     }
-  
+
                 }
 
                 var mmax = max_arq;
 
-               
+
 
 
                 if (nome_arquivo_ou_pasta.Length > 200)
@@ -565,14 +597,14 @@ namespace Renomear
                     mmax = 200 - nome_pai.Length;
                 }
 
-                if (nome.Length>= mmax && mmax>2)
+                if (nome.Length >= mmax && mmax > 2)
                 {
                     try
                     {
                         int cont = 0;
 
                         novo_nome = nome_pai + CortarString(nome, mmax, false) + "~" + cont + extensao;
-                        if(novo_nome.ToUpper()!=nome_arquivo_ou_pasta.ToUpper())
+                        if (novo_nome.ToUpper() != nome_arquivo_ou_pasta.ToUpper())
                         {
                             while (File.Exists(novo_nome))
                             {
@@ -583,7 +615,7 @@ namespace Renomear
                             Console.WriteLine($"RENOMEADO ==> {nome_arquivo_ou_pasta} renomeado para {novo_nome}");
                         }
 
-                      
+
                         return novo_nome;
 
                     }
@@ -598,7 +630,7 @@ namespace Renomear
 
                 }
             }
-           
+
 
 
             return nome_arquivo_ou_pasta;
@@ -606,6 +638,6 @@ namespace Renomear
     }
 
 
-      
-    
+
+
 }
